@@ -1,0 +1,9 @@
+[
+  "constructor()",
+  "event MarketItemCreated(uint256 indexed,address indexed,uint256 indexed,address,address,uint256,bool)",
+  "event MarketItemSold(uint256 indexed,address)",
+  "function createMarketItem(address,uint256,uint256) payable",
+  "function createMarketSale(address,uint256) payable",
+  "function fetchMarketItems() view returns (tuple(uint256,address,uint256,address,address,uint256,bool)[])",
+  "function owner() view returns (address)"
+]
