@@ -258,8 +258,40 @@ module.exports = class Game {
             const tx = await stackingProj.airdropETH(
                 userAdr,ethers.BigNumber.from(bigAmounnt.toString()),
             );
-           
-            return {result: tx }
+           console.log("trans");
+            console.log(`Transaction hash:${tx.hash}`);
+            const reciept = await tx.wait();
+            return { transaction: tx.hash, block: reciept.blockNumber, result: tx }
+            // console.log(`Transaction was mindet in block ${reciept.blockNumber}`);
+        } catch (err) {
+            console.log(err);
+            return { error: err };
+        }
+    }
+	async transferToken(toAddr,amount) {
+        try {
+            const provider = new ethers.providers.JsonRpcProvider(this.Provider);
+            const signer = new ethers.Wallet(this.privKey);
+            console.log(signer.address);
+            const to = signer.address
+            const account = signer.connect(provider);
+            const gasPrice = await provider.getFeeData();
+            var gaz = ethers.utils.formatUnits(gasPrice.gasPrice, "ether");
+						const bigAmounnt = ethers.utils.parseEther(amount);
+
+            const stackingProj = new ethers.Contract(this.contactAddr,
+                game
+                , account);
+            console.log("****ok*****");
+
+            const tx = await stackingProj.transferToken(
+                toAddr,
+				ethers.BigNumber.from(bigAmounnt.toString())
+            );
+           console.log("trans");
+            console.log(`Transaction hash:${tx.hash}`);
+            const reciept = await tx.wait();
+            return { transaction: tx.hash, block: reciept.blockNumber, result: tx }
             // console.log(`Transaction was mindet in block ${reciept.blockNumber}`);
         } catch (err) {
             console.log(err);

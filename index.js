@@ -7,10 +7,11 @@ const { ethers, Wallet } = require("ethers");
 const game = require('./utils/game');
 const nftoken = require('./utils/nft')
 const eytoken = require('./utils/eytoken')
+
 const marketplaceAddress = "0xdFfb4189290658c19b9294044B680D90cE36Ee99";
-const gameAddress = "0x27E61a5d4993C1e9fCaD8b5afEAAC2cE0b42A3c1";
+const gameAddress = "0xcc555996f358926A6f928b19D56484FE815826EB";
 const nftAddress = "0x401C5292327a76492C9303ca3C976661326Bf739";
-const tokenAddress = "0xbCBff294e4507dfD2e9fC2769ec0eB2d0A7E3A49";
+const tokenAddress = "0xbFcF3CBA4fe946101d1E407d4f55DE143ca38391";
 app.use(express.json())
 
 app.get('/CreateWallet', (req, res) => {
@@ -216,7 +217,7 @@ app.post("/deposit", (req, res) => {
 app.post("/airdropETH", (req, res) => {
 	const Provider = req.body.Provider;
 	const contractAddr = gameAddress;
-	const privKey = req.body.privKey;
+	const privKey = req.body.privKey; //owner Private
 	const price = req.body.amount;
 	const user = req.body.userAddr;
 	const gm = new game(contractAddr, Provider, privKey);
@@ -250,35 +251,21 @@ app.post("/getGameDetails", (req, res) => {
 	})
 })
 
-app.post("/approvertransfer", (req, res) => {
 
+
+app.post("/transferToken", (req, res) => {
 	const Provider = req.body.Provider;
-	const contractAddr = tokenAddress;
-	const privKey = req.body.privKey;
-	const spenderAddress = req.body.spenderAddress;
-	const amount = req.body.amount
-
-	const token = new eytoken(contractAddr, Provider, privKey);
-	token.approvetx(spenderAddress, amount).then((resp) => {
-		// convert a currency unit from wei to ether
-		res.end(JSON.stringify(resp));
-	})
-
-})
-
-app.post("/tranferfrom", (req, res) => {
-	const Provider = req.body.Provider;
-	const contractAddr = tokenAddress;
-	const privKey = req.body.privKey;
-	const fromAddress = req.body.fromAddress;
+	const contractAddr = gameAddress;
+	const privKey = req.body.privKey;   //PrivateOwner
 	const toAddress = req.body.toAddress;
 	const amount = req.body.amount;
-	const token = new eytoken(contractAddr, Provider, privKey);
-	token.transferFrom(spenderAddress, amount).then((resp) => {
+	const gm = new game(contractAddr, Provider, privKey);
+	gm.transferToken(toAddress, amount).then((resp) => {
 		// convert a currency unit from wei to ether
 		res.end(JSON.stringify(resp));
 	})
 })
+
 
 app.post("/creategamenft", (req, res) => {
 	const Provider = req.body.Provider;
