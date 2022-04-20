@@ -238,7 +238,35 @@ app.post("/getPlayerBalance", (req, res) => {
 		res.end(JSON.stringify(resp));
 	})
 })
+app.post("/approvertransfer", (req, res) => {
 
+	const Provider = req.body.Provider;
+	const contractAddr = tokenAddress;
+	const privKey = req.body.privKey;
+	const spenderAddress = req.body.spenderAddress;
+	const amount = req.body.amount
+
+	const token = new eytoken(contractAddr, Provider, privKey);
+	token.approvetx(spenderAddress, amount).then((resp) => {
+		// convert a currency unit from wei to ether
+		res.end(JSON.stringify(resp));
+	})
+
+})
+
+app.post("/tranferfrom", (req, res) => {
+	const Provider = req.body.Provider;
+	const contractAddr = tokenAddress;
+	const privKey = req.body.privKey;
+	const fromAddress = req.body.fromAddress;
+	const toAddress = req.body.toAddress;
+	const amount = req.body.amount;
+	const token = new eytoken(contractAddr, Provider, privKey);
+	token.transferFrom(fromAddress,toAddress, amount).then((resp) => {
+		// convert a currency unit from wei to ether
+		res.end(JSON.stringify(resp));
+	})
+})
 app.post("/getGameDetails", (req, res) => {
 	const Provider = req.body.Provider;
 	const contractAddr = gameAddress;
